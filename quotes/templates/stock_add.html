@@ -1,0 +1,82 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+
+
+<div class="row justify-content-center align-items-center">
+    <form
+        action="{% url 'stock_add' %}"
+        class="form-inline align-middle"
+        method="POST"
+    >
+    {% csrf_token %}
+            <input
+                class="form-control "
+                type="search"
+                placeholder="Add to Portfolio"
+                aria-label="Search"
+                name="symbol"
+            />
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                Add Ticker
+            </button>
+    
+    </form> 
+</div>  
+
+  
+{% if api %}
+  <table class="table table-light table-hover mt-3">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Ticker</th>
+        <th scope="col">Company Name</th>
+        <th scope="col">Stock Price</th>
+        <th scope="col">Previous Close</th>
+        <th scope="col">Market Cap</th>
+        <th scope="col">YTD Change</th>
+        <th scope="col">52WK High</th>
+        <th scope="col">52WK Low</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in api %}
+      <tr>
+          <th scope="row">{{ item.symbol }}</th>
+          <td>{{ item.companyName }}</td>
+          <td>${{ item.latestPrice }}</td>
+          <td>${{ item.previousClose }}</td>
+          <td>${{ item.marketCap }}</td>
+          <td>{{ item.ytdChange | floatformat:2  }}%</td>
+          <td>${{ item.week52High | floatformat:2 }}</td>
+          <td>${{ item.week52Low | floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+<br/>
+<br/>
+<div class="row d-flex justify-content-center">
+  <div class="card " style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Current Tickers</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Current symbols in your portfolio</h6>
+      <ul class="list-group">
+        {% for tick in ticker %}
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-sm">{{ tick.symbol }}</div>
+                <div class="col-sm text-right"><a href="{% url 'delete' tick.id %}" class="btn btn-danger">x</a></div>
+              </div>
+            </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+        
+{% endblock %}

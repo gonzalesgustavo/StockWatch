@@ -1,0 +1,34 @@
+{% extends 'base.html' %} {% block content %}
+
+
+{% if ticker %}
+
+    <h2>{{ ticker }}</h2>
+
+{% else %}
+    {% if api_get %}
+        {% if api_get == 'Error' %}
+            <h1>Errpr occured please check ticker or try again later!</h1>
+        {% else %}
+        <div class="row d-flex justify-content-center">
+            <div class="card " style="width: 18rem;">
+                <div class="card-body">
+                <h5 class="card-title">{{ api_get.companyName }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ api_get.symbol }}</h6>
+                <ul class="list-group">
+                    <li class="list-group-item">Price: ${{ api_get.latestPrice }}</li>
+                    <li class="list-group-item">Previous Close: ${{ api_get.previousClose }}</li>
+                    <li class="list-group-item">market Cap: {{ api_get.marketCap }}</li>
+                    <li class="list-group-item">YTD CHange: {{ api_get.ytdChange }}</li>
+                    <li class="list-group-item">52WK High: {{ api_get.week52High }}</li>
+                    <li class="list-group-item">52WK Low: {{ api_get.week52Low }}</li>
+
+                </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endif%}
+{% endif %}
+
+{% endblock %}
